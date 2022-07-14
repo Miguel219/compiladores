@@ -1,7 +1,8 @@
 grammar Yapl;
 program: (class ';')+ ;
-class: CLASS TYPE (INHERITS TYPE)? '{' ((feature | expr) ';')* '}' ;
+class: CLASS TYPE (INHERITS TYPE)? '{' ((feature | attribute) ';')* '}' ;
 feature: ID '(' (formal (',' formal)* )? ')' ':' TYPE '{' expr '}';
+attribute: ID ':' TYPE ('<-' expr)? (',' ID ':' TYPE ('<-' expr)?)*;
 formal: ID ':' TYPE;
 expr: ID '<-' expr
     | expr ('@' TYPE)? '.' ID '(' (expr (',' expr)* )? ')'
@@ -9,7 +10,7 @@ expr: ID '<-' expr
     | IF expr THEN expr ELSE expr FI
     | WHILE expr LOOP expr POOL
     | '{' (expr ';')+ '}'
-    | ('let')? ID ':' TYPE ('<-' expr)? (',' ID ':' TYPE ('<-' expr)?)* (IN expr)?
+    | 'let' ID ':' TYPE ('<-' expr)? (',' ID ':' TYPE ('<-' expr)?)* IN expr
     | NEW TYPE
     | ISVOID expr
     | expr '+' expr
@@ -45,8 +46,11 @@ NOT: 'not';
 TRUE: 'true';
 
 STRING: '"' [\u0000-\u0021\u0023-\u00FF]* '"';
-TYPE: 'SELF_TYPE' | [A-Z][a-zA-Z]*;
+TYPE: 'SELF_TYPE'
+    | [A-Z][a-zA-Z]*;
 INTEGER: [0-9]+;
 ID:   [0-9a-zA-Z_]+;
-WS: [ \t\r\n]+ -> skip; // skip spaces, tabs, newlines, \r (Windows)
-COMMENTS: '--' [\u0000-\u0009\u000B-\u00FF]* [\n] -> skip;
+
+WS: [ \t\r\n]+ -> skip;
+COMMENTS: ('--' [\u0000-\u0009\u000B-\u00FF]* [\n]
+        | '(*' [\u0000-\u00FF]* '*)' ) -> skip;
