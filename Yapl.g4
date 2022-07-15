@@ -11,15 +11,10 @@ expr: ID
     | FALSE
     | NEW TYPE
     | ISVOID expr
-    | '~' expr
-    | NOT expr
-    | expr '<' expr
-    | expr '<=' expr
-    | expr '=' expr
-    | expr '/' expr
-    | expr '*' expr
-    | expr '-' expr
-    | expr '+' expr
+    | ('~' | NOT) expr
+    | expr ('<' | '<=' | '=') expr
+    | expr ('*' | '/') expr
+    | expr ('+' | '-') expr
     | '(' expr ')'
     | ID '<-' expr
     | expr ('@' TYPE)? '.' ID '(' (expr (',' expr)* )? ')'
