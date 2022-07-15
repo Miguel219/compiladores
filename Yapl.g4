@@ -1,33 +1,33 @@
 grammar Yapl;
 program: (class ';')+ ;
-class: CLASS TYPE (INHERITS TYPE)? '{' ((feature | attribute) ';')* '}' ;
-feature: ID '(' (formal (',' formal)* )? ')' ':' TYPE '{' expr '}';
+class: CLASS TYPE (INHERITS TYPE)? '{' ((method | attribute) ';')* '}' ;
+method: ID '(' (formal (',' formal)* )? ')' ':' TYPE '{' expr '}';
 attribute: ID ':' TYPE ('<-' expr)? (',' ID ':' TYPE ('<-' expr)?)*;
 formal: ID ':' TYPE;
-expr: ID '<-' expr
+expr: ID
+    | INTEGER
+    | STRING
+    | TRUE
+    | FALSE
+    | NEW TYPE
+    | ISVOID expr
+    | '~' expr
+    | NOT expr
+    | expr '<' expr
+    | expr '<=' expr
+    | expr '=' expr
+    | expr '/' expr
+    | expr '*' expr
+    | expr '-' expr
+    | expr '+' expr
+    | '(' expr ')'
+    | ID '<-' expr
     | expr ('@' TYPE)? '.' ID '(' (expr (',' expr)* )? ')'
     | ID '(' (expr (',' expr)* )? ')'
     | IF expr THEN expr ELSE expr FI
     | WHILE expr LOOP expr POOL
     | '{' (expr ';')+ '}'
-    | 'let' ID ':' TYPE ('<-' expr)? (',' ID ':' TYPE ('<-' expr)?)* IN expr
-    | NEW TYPE
-    | ISVOID expr
-    | expr '+' expr
-    | expr '-' expr
-    | expr '*' expr
-    | expr '/' expr
-    | '~' expr
-    | expr '<' expr
-    | expr '<=' expr
-    | expr '=' expr
-    | NOT expr
-    | '(' expr ')'
-    | ID
-    | INTEGER
-    | STRING
-    | TRUE
-    | FALSE;
+    | LET ID ':' TYPE ('<-' expr)? (',' ID ':' TYPE ('<-' expr)?)* IN expr;
 
 CLASS: 'class';
 ELSE: 'else';
@@ -44,6 +44,7 @@ WHILE: 'while';
 NEW: 'new';
 NOT: 'not';
 TRUE: 'true';
+LET: 'let';
 
 STRING: '"' [\u0000-\u0021\u0023-\u00FF]* '"';
 TYPE: 'SELF_TYPE'

@@ -22,12 +22,12 @@ class YaplListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by YaplParser#feature.
-    def enterFeature(self, ctx):
+    # Enter a parse tree produced by YaplParser#method.
+    def enterMethod(self, ctx):
         pass
 
-    # Exit a parse tree produced by YaplParser#feature.
-    def exitFeature(self, ctx):
+    # Exit a parse tree produced by YaplParser#method.
+    def exitMethod(self, ctx):
         pass
 
 
